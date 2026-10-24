@@ -7,30 +7,58 @@
   <meta name="description" content="Dibuja un número del 0 al 9 y mira cómo una red neuronal entrenada con MNIST lo reconoce, capa por capa.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <main>
-    <header>
-      <h1>¿Qué número es?</h1>
-      <p class="sub">Dibuja un dígito del 0 al 9. Una red neuronal entrenada con 60 mil ejemplos de MNIST
-        lo reconoce en tu navegador y te muestra qué pasa dentro de cada capa.</p>
-    </header>
+  <header class="barra">
+    <div class="barra-interior">
+      <span class="marca">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <rect x="3" y="3" width="5" height="5" rx="1"/><rect x="9.5" y="3" width="5" height="5" rx="1" opacity=".45"/><rect x="16" y="3" width="5" height="5" rx="1"/>
+          <rect x="3" y="9.5" width="5" height="5" rx="1" opacity=".45"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><rect x="16" y="9.5" width="5" height="5" rx="1" opacity=".45"/>
+          <rect x="3" y="16" width="5" height="5" rx="1"/><rect x="9.5" y="16" width="5" height="5" rx="1" opacity=".45"/><rect x="16" y="16" width="5" height="5" rx="1"/>
+        </svg>
+        que-numero-es
+      </span>
+      <a class="boton boton-fantasma" href="https://github.com/Jose07Rdz/mnist-red-neuronal">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.19-3.08-.12-.3-.52-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+        Código
+      </a>
+    </div>
+  </header>
 
-    <section class="panel-superior">
-      <div class="tarjeta lienzo-tarjeta">
+  <main>
+    <section class="heroe">
+      <p class="ceja">Red neuronal · MNIST · En tu navegador</p>
+      <h1>Dibuja un número.<br><span>La red adivina cuál es.</span></h1>
+      <p class="sub">Dos redes entrenadas con 60 mil dígitos escritos a mano reconocen lo que dibujas
+        y te muestran qué pasa dentro de cada capa. Todo se calcula aquí mismo, sin servidor.</p>
+      <ul class="datos" aria-label="Datos de los modelos">
+        <li><span class="dato-valor" id="dato-cnn">–</span><span class="dato-etiqueta">aciertos, red convolucional</span></li>
+        <li><span class="dato-valor" id="dato-mlp">–</span><span class="dato-etiqueta">aciertos, red densa</span></li>
+        <li><span class="dato-valor">10,000</span><span class="dato-etiqueta">imágenes de prueba</span></li>
+      </ul>
+    </section>
+
+    <section class="laboratorio">
+      <div class="tarjeta">
         <div class="tarjeta-cabeza">
-          <h2>Dibuja aquí</h2>
-          <button id="borrar" type="button">Borrar</button>
+          <h2><span class="paso">01</span> Dibuja</h2>
+          <button id="borrar" class="boton" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 21-4.3-4.3a1 1 0 0 1 0-1.4l10-10a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L11 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+            Borrar
+          </button>
         </div>
-        <canvas id="lienzo" width="280" height="280" aria-label="Área para dibujar un número"></canvas>
-        <p class="nota">Usa todo el recuadro. Funciona con mouse, dedo o lápiz.</p>
+        <div class="marco-lienzo">
+          <canvas id="lienzo" width="280" height="280" aria-label="Área para dibujar un número del 0 al 9"></canvas>
+        </div>
+        <p class="nota centrada">Un dígito grande que ocupe casi todo el recuadro. Mouse, dedo o lápiz.</p>
       </div>
 
       <div class="tarjeta">
         <div class="tarjeta-cabeza">
-          <h2>Predicción</h2>
+          <h2><span class="paso">02</span> Predicción</h2>
           <div class="selector" role="tablist" aria-label="Modelo">
             <button type="button" role="tab" data-modelo="cnn" aria-selected="true">Convolucional</button>
             <button type="button" role="tab" data-modelo="mlp" aria-selected="false">Densa</button>
@@ -43,38 +71,50 @@
             <div class="precision" id="precision"></div>
           </div>
         </div>
-        <ol class="barras" id="barras"></ol>
+        <ol class="barras" id="barras" aria-label="Probabilidad de cada dígito"></ol>
       </div>
     </section>
 
     <section class="tarjeta">
       <div class="tarjeta-cabeza">
-        <h2>Dentro de la red</h2>
+        <h2><span class="paso">03</span> Dentro de la red</h2>
         <span class="leyenda"><span class="muestra"></span> más activa</span>
       </div>
       <div class="red-contenedor">
         <canvas id="red" aria-label="Diagrama de la red neuronal con sus activaciones"></canvas>
       </div>
+      <p class="nota deslizar">Desliza el diagrama hacia los lados para verlo completo.</p>
       <p class="nota" id="explicacion"></p>
     </section>
 
-    <section class="tarjeta como">
+    <section class="como">
       <h2>Cómo funciona</h2>
-      <ol>
-        <li><strong>Preparar la imagen.</strong> Tu dibujo se recorta, se reduce a 28×28 píxeles y se centra,
-          igual que las imágenes de MNIST.</li>
-        <li><strong>Pasar por las capas.</strong> Cada neurona suma los valores de la capa anterior multiplicados
-          por sus pesos y se queda solo con lo positivo (ReLU). Los colores del diagrama son esas activaciones.</li>
-        <li><strong>Decidir.</strong> La última capa da un puntaje por dígito y <code>softmax</code> lo convierte
-          en probabilidades. Gana el más alto.</li>
+      <ol class="pasos">
+        <li>
+          <span class="paso">01</span>
+          <h3>Preparar la imagen</h3>
+          <p>Tu dibujo se recorta, se reduce a 28×28 píxeles y se centra por su centro de masa, igual que las imágenes de MNIST.</p>
+        </li>
+        <li>
+          <span class="paso">02</span>
+          <h3>Pasar por las capas</h3>
+          <p>Cada neurona suma los valores de la capa anterior multiplicados por sus pesos y se queda solo con lo positivo (ReLU).</p>
+        </li>
+        <li>
+          <span class="paso">03</span>
+          <h3>Decidir</h3>
+          <p>La última capa da un puntaje por dígito y <code>softmax</code> lo convierte en probabilidades. Gana el más alto.</p>
+        </li>
       </ol>
-      <p>La red <strong>convolucional</strong> recorre la imagen con filtros de 3×3 que detectan bordes y curvas;
-        la <strong>densa</strong> mira los 784 píxeles a la vez. Prueba las dos con un número chueco o
-        descentrado y compara.</p>
-      <p class="pie">Modelos entrenados con PyTorch y ejecutados en JavaScript puro.
-        <a href="https://github.com/Jose07Rdz/mnist-red-neuronal">Código en GitHub</a>.</p>
+      <p class="nota">La red <strong>convolucional</strong> recorre la imagen con filtros de 3×3 que detectan bordes y curvas;
+        la <strong>densa</strong> mira los 784 píxeles a la vez. Prueba las dos con un número chueco o descentrado y compara.</p>
     </section>
   </main>
+
+  <footer class="pie">
+    <p>Hecho por José González · Modelos entrenados con PyTorch y ejecutados en JavaScript puro ·
+      <a href="https://github.com/Jose07Rdz/mnist-red-neuronal">Código en GitHub</a></p>
+  </footer>
   <script type="module" src="app.js"></script>
 </body>
 </html>

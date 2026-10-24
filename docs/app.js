@@ -4,6 +4,8 @@ const datos = await fetch("modelos.json").then((r) => r.json());
 const { media, desviacion } = datos.normalizacion;
 const modelos = { mlp: cargarModelo(datos.mlp), cnn: cargarModelo(datos.cnn) };
 let modeloActivo = "cnn";
+for (const nombre of ["cnn", "mlp"])
+  document.getElementById(`dato-${nombre}`).textContent = `${(modelos[nombre].precision * 100).toFixed(1)} %`;
 
 const lienzo = document.getElementById("lienzo");
 const ctx = lienzo.getContext("2d", { willReadFrequently: true });
@@ -211,7 +213,7 @@ function dibujarRed(imagen, salida) {
   const cTexto = color("--texto-suave"), cFuerte = color("--texto");
   const c0 = rgb(color("--neurona")), c1 = rgb(color("--acento")), cLinea = color("--linea");
   const negro = [0, 0, 0], blanco = [255, 255, 255];
-  g.font = "500 13px Inter, system-ui, sans-serif";
+  g.font = "500 13px 'IBM Plex Sans', system-ui, sans-serif";
   g.textAlign = "center";
   g.textBaseline = "middle";
 
@@ -336,11 +338,11 @@ function dibujarRed(imagen, salida) {
       g.lineWidth = 2;
       g.stroke();
     }
-    g.fillStyle = prob > 0.5 ? "#fff" : cFuerte;
+    g.fillStyle = prob > 0.5 ? color("--sobre-acento") : cFuerte;
     g.font = "600 14px 'JetBrains Mono', ui-monospace, monospace";
     g.fillText(d, p.x, p.y + 1);
     g.fillStyle = cTexto;
-    g.font = "500 12px Inter, system-ui, sans-serif";
+    g.font = "500 12px 'IBM Plex Sans', system-ui, sans-serif";
     g.textAlign = "left";
     if (salida) g.fillText(`${Math.round(prob * 100)}%`, p.x + p.r + 8, p.y + 1);
     g.textAlign = "center";
