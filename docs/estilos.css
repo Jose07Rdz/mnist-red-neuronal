@@ -1,0 +1,151 @@
+:root {
+  --fondo: #f6f7fb;
+  --tarjeta: #ffffff;
+  --borde: #e2e5ee;
+  --texto: #161a26;
+  --texto-suave: #5b6275;
+  --acento: #4f46e5;
+  --acento-suave: #e0e7ff;
+  --neurona: #e9ebf2;
+  --linea: #4f46e5;
+  --lienzo: #0f1220;
+  --trazo: #ffffff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #0d0f17;
+    --tarjeta: #161925;
+    --borde: #262a3a;
+    --texto: #eceef5;
+    --texto-suave: #9aa0b4;
+    --acento: #8b84ff;
+    --acento-suave: #2a2850;
+    --neurona: #232738;
+    --linea: #8b84ff;
+    --lienzo: #05060b;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 16px/1.55 Inter, system-ui, -apple-system, sans-serif;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+  display: grid;
+  gap: 20px;
+}
+
+h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 6px; letter-spacing: -0.02em; }
+h2 { font-size: 1rem; margin: 0; font-weight: 600; }
+.sub { margin: 0; color: var(--texto-suave); max-width: 62ch; }
+
+.panel-superior {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 720px) {
+  .panel-superior { grid-template-columns: 1fr; }
+}
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 18px;
+  min-width: 0;
+}
+
+.tarjeta-cabeza {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+button {
+  font: inherit;
+  font-size: 0.875rem;
+  border: 1px solid var(--borde);
+  background: var(--tarjeta);
+  color: var(--texto);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--acento); }
+button:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+.selector { display: inline-flex; background: var(--neurona); border-radius: 9px; padding: 3px; }
+.selector button { border: 0; background: transparent; color: var(--texto-suave); }
+.selector button[aria-selected="true"] { background: var(--tarjeta); color: var(--texto); font-weight: 600; }
+
+#lienzo {
+  display: block;
+  width: 100%;
+  max-width: 304px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  background: var(--lienzo);
+  border-radius: 10px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.nota { color: var(--texto-suave); font-size: 0.85rem; margin: 10px 0 0; }
+.lienzo-tarjeta .nota { text-align: center; }
+
+.resultado { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+.digito {
+  font: 500 4.2rem/1 "JetBrains Mono", ui-monospace, monospace;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--acento-suave);
+  color: var(--acento);
+  flex: none;
+}
+.seguridad { font-size: 1.15rem; font-weight: 600; }
+.precision { color: var(--texto-suave); font-size: 0.85rem; }
+
+.barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.barras li { display: grid; grid-template-columns: 18px 1fr 46px; align-items: center; gap: 10px; font-size: 0.85rem; }
+.barras .num { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.barras .pista { height: 12px; background: var(--neurona); border-radius: 6px; overflow: hidden; }
+.barras .relleno { height: 100%; width: 0; background: var(--texto-suave); border-radius: 6px; transition: width 120ms ease-out; }
+.barras li.gana .relleno { background: var(--acento); }
+.barras li.gana .num { color: var(--acento); font-weight: 600; }
+.barras .pct { text-align: right; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+
+.leyenda { display: inline-flex; align-items: center; gap: 8px; color: var(--texto-suave); font-size: 0.85rem; }
+.muestra { width: 60px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--neurona), var(--acento)); }
+
+.red-contenedor { overflow-x: auto; }
+#red { display: block; width: 100%; min-width: 640px; aspect-ratio: 960 / 520; }
+
+.como ol { padding-left: 20px; margin: 10px 0; }
+.como li { margin-bottom: 6px; }
+.como p { margin: 8px 0 0; color: var(--texto-suave); }
+.como .pie { font-size: 0.85rem; margin-top: 14px; }
+a { color: var(--acento); }
+code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .barras .relleno { transition: none; }
+}

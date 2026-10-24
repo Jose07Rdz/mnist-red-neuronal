@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>¿Qué número es? Red neuronal en vivo</title>
+  <meta name="description" content="Dibuja un número del 0 al 9 y mira cómo una red neuronal entrenada con MNIST lo reconoce, capa por capa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>¿Qué número es?</h1>
+      <p class="sub">Dibuja un dígito del 0 al 9. Una red neuronal entrenada con 60 mil ejemplos de MNIST
+        lo reconoce en tu navegador y te muestra qué pasa dentro de cada capa.</p>
+    </header>
+
+    <section class="panel-superior">
+      <div class="tarjeta lienzo-tarjeta">
+        <div class="tarjeta-cabeza">
+          <h2>Dibuja aquí</h2>
+          <button id="borrar" type="button">Borrar</button>
+        </div>
+        <canvas id="lienzo" width="280" height="280" aria-label="Área para dibujar un número"></canvas>
+        <p class="nota">Usa todo el recuadro. Funciona con mouse, dedo o lápiz.</p>
+      </div>
+
+      <div class="tarjeta">
+        <div class="tarjeta-cabeza">
+          <h2>Predicción</h2>
+          <div class="selector" role="tablist" aria-label="Modelo">
+            <button type="button" role="tab" data-modelo="cnn" aria-selected="true">Convolucional</button>
+            <button type="button" role="tab" data-modelo="mlp" aria-selected="false">Densa</button>
+          </div>
+        </div>
+        <div class="resultado">
+          <div class="digito" id="digito" aria-live="polite">?</div>
+          <div>
+            <div class="seguridad" id="seguridad">Esperando tu dibujo</div>
+            <div class="precision" id="precision"></div>
+          </div>
+        </div>
+        <ol class="barras" id="barras"></ol>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <div class="tarjeta-cabeza">
+        <h2>Dentro de la red</h2>
+        <span class="leyenda"><span class="muestra"></span> más activa</span>
+      </div>
+      <div class="red-contenedor">
+        <canvas id="red" aria-label="Diagrama de la red neuronal con sus activaciones"></canvas>
+      </div>
+      <p class="nota" id="explicacion"></p>
+    </section>
+
+    <section class="tarjeta como">
+      <h2>Cómo funciona</h2>
+      <ol>
+        <li><strong>Preparar la imagen.</strong> Tu dibujo se recorta, se reduce a 28×28 píxeles y se centra,
+          igual que las imágenes de MNIST.</li>
+        <li><strong>Pasar por las capas.</strong> Cada neurona suma los valores de la capa anterior multiplicados
+          por sus pesos y se queda solo con lo positivo (ReLU). Los colores del diagrama son esas activaciones.</li>
+        <li><strong>Decidir.</strong> La última capa da un puntaje por dígito y <code>softmax</code> lo convierte
+          en probabilidades. Gana el más alto.</li>
+      </ol>
+      <p>La red <strong>convolucional</strong> recorre la imagen con filtros de 3×3 que detectan bordes y curvas;
+        la <strong>densa</strong> mira los 784 píxeles a la vez. Prueba las dos con un número chueco o
+        descentrado y compara.</p>
+      <p class="pie">Modelos entrenados con PyTorch y ejecutados en JavaScript puro.
+        <a href="https://github.com/Jose07Rdz/mnist-red-neuronal">Código en GitHub</a>.</p>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
